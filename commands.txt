@@ -1,0 +1,2 @@
+cd codebase/mentored-fa22-rampup
+ls
