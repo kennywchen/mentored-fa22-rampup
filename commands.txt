@@ -1,2 +1,2 @@
-cd codebase/mentored-fa22-rampup
-ls
+Navigate to this directory codebase/mentored-fa22-rampup
+What files are in this directory?
