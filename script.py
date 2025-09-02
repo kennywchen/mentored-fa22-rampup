@@ -1,9 +1,22 @@
 import requests
 import subprocess
-import pexpect
 import sys
 import os
 from dotenv import load_dotenv
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    event = request.headers.get("X-GitHub-Event")
+    payload = request.json
+    print(f"Received event: {event}")
+    print(payload)
+    print("Potato")
+    print("POTATOOOO")
+    main()
+    return "OK", 200
 
 def main():
     # Load environment variables from .env file
@@ -35,7 +48,7 @@ def main():
     #         f.write(prompt + "\n")
     
     # Spawn cursor-agent CLI
-    prompts = ["I have a bug in toFix.py. Please fix it.", "I have a bug in toFix2.py. I want to print the numbers 1 to 5. Please fix it."]
+    prompts = ["I have a bug in toFix.py. Please fix it.", "I have a bug in toFix2.py. I want to print the numbers 1 to 6. Please fix it."]
     
     try:
         # Send each prompt to a new cursor-agent process
@@ -81,4 +94,4 @@ def main():
             
 
 if __name__ == "__main__":
-    main()
+    app.run(port=5000)
