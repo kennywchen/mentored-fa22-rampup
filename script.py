@@ -4,6 +4,7 @@ import sys
 import os
 from dotenv import load_dotenv
 from flask import Flask, request
+from threading import Thread
 
 app = Flask(__name__)
 
@@ -13,16 +14,15 @@ def webhook():
     payload = request.json
     print(f"Received event: {event}")
     print(payload)
-    print("Potato")
     print("POTATOOOO")
-    main()
     return "OK", 200
 
+def run_server():
+    app.run(port=5000, threaded=True, use_reloader=False)
+
 def main():
-    # Load environment variables from .env file
     load_dotenv()
     
-    # GitHub API code (keeping original functionality)
     owner = "kennywchen"
     repo = "mentored-fa22-rampup"
     token = os.getenv("GITHUB_TOKEN")
@@ -48,7 +48,7 @@ def main():
     #         f.write(prompt + "\n")
     
     # Spawn cursor-agent CLI
-    prompts = ["I have a bug in toFix.py. Please fix it.", "I have a bug in toFix2.py. I want to print the numbers 1 to 6. Please fix it."]
+    prompts = ["I have a bug in toFix.py. I want to print numbers 1 to 10. Please fix it.", "I have a bug in toFix2.py. I want to print the numbers 0 to 6. Please fix it."]
     
     try:
         # Send each prompt to a new cursor-agent process
@@ -82,7 +82,8 @@ def main():
             if stderr:
                 print("STDERR:", stderr)
         
-        process.terminate()
+            process.terminate()
+
         subprocess.run(["git", "add", "."])
         subprocess.run(["git", "commit", "-m", "Automatically fixed bugs"])
         subprocess.run(["git", "push"])
@@ -94,4 +95,7 @@ def main():
             
 
 if __name__ == "__main__":
-    app.run(port=5000)
+    server_thread = Thread(target=run_server)
+    server_thread.start()
+    main()
+    server_thread.join()
