@@ -97,5 +97,5 @@ def main():
 if __name__ == "__main__":
     server_thread = Thread(target=run_server)
     server_thread.start()
-    main()
+    # main()
     server_thread.join()
