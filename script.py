@@ -14,11 +14,13 @@ def webhook():
     payload = request.json
     print(f"Received event: {event}")
     print(payload)
+
+    if payload:
+        thread = Thread(target=main, args=())
+        thread.start()
+
     print("POTATOOOO")
     return "OK", 200
-
-def run_server():
-    app.run(port=5000, threaded=True, use_reloader=False)
 
 def main():
     load_dotenv()
@@ -48,7 +50,7 @@ def main():
     #         f.write(prompt + "\n")
     
     # Spawn cursor-agent CLI
-    prompts = ["I have a bug in toFix.py. I want to print numbers 1 to 10. Please fix it.", "I have a bug in toFix2.py. I want to print the numbers 0 to 6. Please fix it."]
+    prompts = ["I have a bug in toFix.py. I want to print numbers 1 to 15. Please fix it.", "I have a bug in toFix2.py. I want to print the numbers 0 to 16. Please fix it."]
     
     try:
         # Send each prompt to a new cursor-agent process
@@ -95,7 +97,4 @@ def main():
             
 
 if __name__ == "__main__":
-    server_thread = Thread(target=run_server)
-    server_thread.start()
-    # main()
-    server_thread.join()
+    app.run(port=5000)
