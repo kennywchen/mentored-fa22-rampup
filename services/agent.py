@@ -9,7 +9,7 @@ app = Flask(__name__)
 def call_agent():
     try:
         data = request.json
-        prompt = f"You are a helpful assistant that can help me write and fix code. I have the following review for a code file: {data['body']}. Please write the code for me. The file is {data['path']} and the line range is {data['line_start']}-{data['line_end']}. Please write understand the code review and make the proper adjustments for me."
+        prompt = f"You are a helpful assistant that can help me write and fix code. I have the following review for a code file: {data['body']}. Please write the code for me. The file is {data['file_path']} and the line range is {data['line_start']}-{data['line_end']}. Please write understand the code review and make the proper adjustments for me."
         process_prompt(prompt)
 
     except Exception as e:
@@ -22,8 +22,6 @@ def call_agent():
 def process_prompt(prompt):
     """Process a single prompt in a separate thread"""
     try:
-        print(f"\n--- Processing prompt: {prompt[:50]}... ---")
-        
         process = subprocess.Popen(
             ["cursor-agent"], 
             stdin=subprocess.PIPE, 

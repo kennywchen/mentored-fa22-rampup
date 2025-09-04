@@ -9,8 +9,12 @@ app = Flask(__name__)
 def git_setup():
     try:
         ids = request.json.get("ids")
+        print(f"Git manager called with IDs: {ids}")
+        subprocess.run(["ls"])
         subprocess.run(["git", "add", "."])
-        subprocess.run(["git", "commit", "-m", " Addressed comments: " + ", ".join(ids)])
+        commit_message = f"Fixed comments {ids}"
+        print(f"Commit message: {commit_message}")
+        subprocess.run(["git", "commit", "-m", commit_message])
         subprocess.run(["git", "push"])
         return "OK", 200
     except Exception as e:
